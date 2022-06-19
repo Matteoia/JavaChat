@@ -10,7 +10,7 @@ public class GestoreComandi {
     private static String commandList;
     private static void getCommandList() throws IOException {
         StringBuilder sb = new StringBuilder();
-        File f = new File("./src/javachat/documenti/Comandi.txt");
+        File f = new File("./src/documenti/Comandi.txt");
         System.out.println(f.getAbsolutePath());
         BufferedReader br = new BufferedReader(new FileReader(f));
         String tmp;
