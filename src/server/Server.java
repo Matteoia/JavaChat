@@ -16,7 +16,6 @@ public class Server {
 	private Server(int porta) throws IOException {
 		serverSocket = new ServerSocket(porta);
 		utenti = new Utenti();
-		GestoreComandi.setServer(this);
 	}
 
 	synchronized
@@ -25,16 +24,6 @@ public class Server {
 			server = new Server(porta);
 		}
 		return server;
-	}
-
-	public void remove(String utente) {
-		try {
-			inizioScrittura();
-			utenti.removeUtente(utente);
-			fineScrittura();
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	private void start() {
@@ -107,8 +96,8 @@ public class Server {
 		}
 	}
 
-	public String getOnlineUser() {
-		String utentiOnline = "";
+	public String[] getOnlineUsers() {
+		String[] utentiOnline = new String[1];
 		try{
 			inizioLettura();
 			utentiOnline = utenti.getOnlineUser();

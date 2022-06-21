@@ -1,3 +1,0 @@
-/h  :help, mostra questa lista di comandi.
-/l  :list, mostra tutti gli utenti attualmente online.
-Per inviare un messaggio scrivere: Testo del messaggio :to: nome destinatario

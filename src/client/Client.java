@@ -23,8 +23,10 @@ public class Client {
 	private ClientApp grafica;
 	private Semaphore messageS = new Semaphore(0);
 	private String msg;
+	private String[] users;
+	private Semaphore usersSemaphore = new Semaphore(0);
 
-	
+
 	public Client(ClientApp grafica, String ip, int port) {
 		try{
 			this.grafica = grafica;
@@ -120,5 +122,24 @@ public class Client {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	public String[] getOnlineUsers() {
+		try{
+			this.sender.makeOnlineUsersRequest();
+			this.usersSemaphore.acquire();
+			return this.users;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void usersReceived() {
+		this.usersSemaphore.release();
+	}
+
+	public void setUsers(String[] users) {
+		this.users = users;
 	}
 }

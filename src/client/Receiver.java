@@ -27,8 +27,11 @@ public class Receiver extends Thread {
 						String messaggio = data[0];
 						String nomeMittente = data[1];
 						if(nomeMittente.equals("ServerSender")){
-							if(messaggio.equals("CommandResponse"))
-								client.showMessage((String)serverInput.readObject());
+							if(messaggio.equals("UsersListResponse")){
+								System.out.println("ho ricevuto la lista");
+								client.setUsers((String[])serverInput.readObject());
+								client.usersReceived();
+							}
 							if(messaggio.equals("UserNotFound")){
 								client.free();
 								client.showMessage("Utente non trovato");
@@ -41,6 +44,8 @@ public class Receiver extends Thread {
 							client.addPublicKey(nomeMittente, key);
 						}if(messaggio.equals("CriptedMessage")){
 							byte[] messaggioCifrato = (byte[])serverInput.readObject();
+							client.showMessage("Messaggop criptato");
+							client.showMessage(messaggioCifrato.toString());
 							String messaggioInChiaro = AsymmetricEncr.decripta(messaggioCifrato, client.getPrivateKey());
 							client.showMessage("Messaggio da "+nomeMittente+":");
 							client.showMessage(messaggioInChiaro);

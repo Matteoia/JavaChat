@@ -20,11 +20,8 @@ public class Utenti {
         connessioni.remove(u);
     }
 
-    public String getOnlineUser() {
-        StringBuilder s = new StringBuilder();
-        for(String key : connessioni.keySet())
-            s.append(key).append("\n");
-       return s.toString();
+    public String[] getOnlineUser() {
+        return connessioni.keySet().toArray(new String[0]);
     }
 
 }

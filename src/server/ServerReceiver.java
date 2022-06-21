@@ -32,25 +32,29 @@ public class ServerReceiver extends Thread {
 			if(dataV.length == 2){
 				String msg = dataV[0];
 				String destinatario = dataV[1].replaceAll("\\s+", "");
-				ObjectOutputStream streamDestinatario = server.getUserStream(destinatario);
-				if(streamDestinatario == null){
-					utenteOutput.writeObject("UserNotFound:from:ServerSender");
+				if(destinatario.equals("ServerSender")){
+					if(msg.equals("UsersListRequest")){
+						utenteOutput.writeObject("UsersListResponse:from:ServerSender");
+						utenteOutput.writeObject(server.getOnlineUsers());
+					}
 				}else{
-					if(msg.equals("PublicKeyRequest")){
-						streamDestinatario.writeObject(msg+":from:"+this.utente);
-					}if(msg.equals("PublicKeyResponse")){
-						PublicKey key = (PublicKey) utenteInput.readObject();
-						streamDestinatario.writeObject(msg+":from:"+this.utente);
-						streamDestinatario.writeObject(key);
-					}if(msg.equals("CriptedMessage")){
-						byte[] criptato = (byte[])utenteInput.readObject();
-						streamDestinatario.writeObject(msg+":from:"+this.utente);
-						streamDestinatario.writeObject(criptato);
+					ObjectOutputStream streamDestinatario = server.getUserStream(destinatario);
+					if(streamDestinatario == null){
+						utenteOutput.writeObject("UserNotFound:from:ServerSender");
+					}else{
+						if(msg.equals("PublicKeyRequest")){
+							streamDestinatario.writeObject(msg+":from:"+this.utente);
+						}if(msg.equals("PublicKeyResponse")){
+							PublicKey key = (PublicKey) utenteInput.readObject();
+							streamDestinatario.writeObject(msg+":from:"+this.utente);
+							streamDestinatario.writeObject(key);
+						}if(msg.equals("CriptedMessage")){
+							byte[] criptato = (byte[])utenteInput.readObject();
+							streamDestinatario.writeObject(msg+":from:"+this.utente);
+							streamDestinatario.writeObject(criptato);
+						}
 					}
 				}
-			}else{
-				utenteOutput.writeObject("CommandResponse:from:ServerSender");
-				utenteOutput.writeObject(GestoreComandi.gestisci(data));
 			}
 		}
 	}
@@ -77,7 +81,7 @@ public class ServerReceiver extends Thread {
 			while(!sockUtente.isClosed() || !server.serverSocket.isClosed())
 				listen();
 		}catch(Exception e) {
-			server.remove(utente);
+			server.removeUtente(utente);
 			System.out.println("utente disconnesso");
 		}
 	}

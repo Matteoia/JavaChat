@@ -27,6 +27,14 @@ public class Sender extends Thread {
 		}
 	}
 
+	public void makeOnlineUsersRequest() {
+		try {
+			serverOutput.writeObject("UsersListRequest:to:ServerSender");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void sendPublicKey(String destinatario, PublicKey aPublic) {
 		try {
 			serverOutput.writeObject("PublicKeyResponse:to:"+destinatario);
@@ -53,7 +61,8 @@ public class Sender extends Thread {
 					PublicKey chiaveDestinatario = this.client.getDestPublicKey(nomeDestinatario);
 					if (chiaveDestinatario != null) {
 						byte[] messaggioCriptato = AsymmetricEncr.cripta(testo, chiaveDestinatario);
-						serverOutput.writeObject("CriptedMessage:to:" + nomeDestinatario);
+						client.showMessage(msg);
+						serverOutput.writeObject("CriptedMessage:to:"+nomeDestinatario);
 						serverOutput.writeObject(messaggioCriptato);
 					}
 				} else
@@ -63,4 +72,6 @@ public class Sender extends Thread {
 			e.printStackTrace();
 		}
 	}
+
+
 }
