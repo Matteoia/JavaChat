@@ -14,7 +14,12 @@ public class ClientApp extends JFrame {
     private OnlineUsersBar usersBar;
     public final Font font = new Font("SansSerif", Font.BOLD, 17);
 
-    public ClientApp(String ip, int port){
+    public ClientApp(){
+        String ip=""; int port=0;
+        ConnectionSetup cs = new ConnectionSetup();
+        ip = cs.getIp();
+        port = cs.getPort();
+        cs.dispose();
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(this.WIDTH, this.HEIGHT);
         this.setResizable(false);
@@ -50,7 +55,7 @@ public class ClientApp extends JFrame {
     }
 
     public static void main(String[] args) {
-        ClientApp ca = new ClientApp("87.3.90.243", 5000);
+        ClientApp ca = new ClientApp();
         ca.setVisible(true);
     }
 }
