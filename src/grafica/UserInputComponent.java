@@ -11,14 +11,14 @@ public class UserInputComponent extends JPanel {
 
     public UserInputComponent(ClientApp client){
         this.client = client;
-        this.setPreferredSize(new Dimension((client.WIDTH*70)/100, client.HEIGHT));
+        this.setPreferredSize(new Dimension((client.WIDTH*7)/10, (client.HEIGHT*8)/10));
 
         this.dataReceived.setFont(client.font);
         this.dataReceived.setEditable(false);
-        this.dataReceived.setPreferredSize(new Dimension((client.WIDTH*70)/100, client.HEIGHT));
+        this.dataReceived.setPreferredSize(new Dimension((client.WIDTH*7)/10, (client.HEIGHT*8)/10));
 
         this.scroll = new JScrollPane(dataReceived, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.scroll.setPreferredSize(new Dimension((client.WIDTH*70)/100, client.HEIGHT));
+
         ((DefaultCaret)dataReceived.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         this.add(scroll);

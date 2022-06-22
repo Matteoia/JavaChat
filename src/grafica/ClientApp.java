@@ -50,7 +50,7 @@ public class ClientApp extends JFrame {
     }
 
     public static void main(String[] args) {
-        ClientApp ca = new ClientApp("localhost", 5000);
+        ClientApp ca = new ClientApp("87.3.90.243", 5000);
         ca.setVisible(true);
     }
 }
