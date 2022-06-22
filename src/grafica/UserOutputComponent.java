@@ -32,7 +32,7 @@ public class UserOutputComponent extends JPanel {
             if(e.getActionCommand().equals("send")){
                 String msg = userData.getText();
                 userData.setText("");
-                client.sendMessage(msg);
+                client.setMessage(msg);
             }
         }
     }

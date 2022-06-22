@@ -28,6 +28,7 @@ public class ServerReceiver extends Thread {
 		Object ob = utenteInput.readObject();
 		if(ob instanceof String ) {
 			String data = (String)ob;
+			System.out.println(data);
 			String[] dataV = data.split(":to:");
 			if(dataV.length == 2){
 				String msg = dataV[0];
@@ -36,6 +37,12 @@ public class ServerReceiver extends Thread {
 					if(msg.equals("UsersListRequest")){
 						utenteOutput.writeObject("UsersListResponse:from:ServerSender");
 						utenteOutput.writeObject(server.getOnlineUsers());
+					}
+					if(msg.equals("RegisterRequest")){
+						this.utente = (String)utenteInput.readObject();
+						this.server.addUtente(utente, utenteOutput);
+						this.utenteOutput.writeObject("StringResponse:from:ServerSender");
+						this.utenteOutput.writeObject("Benvenuto/a "+this.utente);
 					}
 				}else{
 					ObjectOutputStream streamDestinatario = server.getUserStream(destinatario);
@@ -59,25 +66,13 @@ public class ServerReceiver extends Thread {
 		}
 	}
 
-	private void registerUser() throws Exception{
-		Object ob = utenteInput.readObject();
-		if(ob instanceof String ) {
-			String data = (String)ob;
-			if(this.utente == null && data.contains("UserName:from:")){
-				this.utente = data.split("UserName:from:")[1];
-				server.addUtente(this.utente, utenteOutput);
-				utenteOutput.writeObject("WelcomeResponse:from:ServerSender");
-				utenteOutput.writeObject("Benvenuto/a "+utente+"\n" +
-						"Per la lista dei comandi scrivere /h");
-			}
-		}
-	}
 
 
 	@Override
 	public void run() {
 		try {
-			registerUser();
+			utenteOutput.writeObject("StringResponse:from:ServerSender");
+			utenteOutput.writeObject("Inserisci il tuo nickname per iniziare");
 			while(!sockUtente.isClosed() || !server.serverSocket.isClosed())
 				listen();
 		}catch(Exception e) {

@@ -20,16 +20,17 @@ public class Client {
 	private Semaphore attesaChiave = new Semaphore(0);
 	private Sender sender;
 	private Receiver receiver;
-	private ClientApp grafica;
+	private ClientApp graphicClient;
 	private Semaphore messageS = new Semaphore(0);
 	private String msg;
 	private String[] users;
 	private Semaphore usersSemaphore = new Semaphore(0);
+	public String user;
 
 
-	public Client(ClientApp grafica, String ip, int port) {
+	public Client(ClientApp graphicClient, String ip, int port) {
 		try{
-			this.grafica = grafica;
+			this.graphicClient = graphicClient;
 			this.socket = new Socket(ip, port);
 			this.chiavi = AsymmetricEncr.generaChiavi();
 		}catch(Exception e){
@@ -78,10 +79,6 @@ public class Client {
 		attesaChiave.release();
 	}
 
-	public void free(){
-		attesaChiave.release();
-	}
-
 	public void sendPublicKey(String nomeMittente) {
 		this.sender.sendPublicKey(nomeMittente, chiavi.getPublic());
 	}
@@ -90,22 +87,22 @@ public class Client {
 		return socket.isClosed();
 	}
 
-	public void sendMessage(String msg) {
+	public void setMessage(String msg) {
 		this.msg = msg;
+		System.out.println(msg);
 		messageS.release();
 	}
 
 	public void showMessage(String s) {
-		grafica.showMessage(s);
+		graphicClient.showMessage(s);
 	}
 
 	public String getMessage() {
 		try{
+			msg = null;
 			if(this.msg == null){
 				messageS.acquire();
-				String tmp = msg;
-				msg = null;
-				return tmp;
+				return msg;
 			}
 		}catch(Exception e){
 			e.printStackTrace();

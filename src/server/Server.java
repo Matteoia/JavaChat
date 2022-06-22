@@ -18,14 +18,6 @@ public class Server {
 		utenti = new Utenti();
 	}
 
-	synchronized
-	public static Server getServer(int porta) throws IOException {
-		if(server == null){
-			server = new Server(porta);
-		}
-		return server;
-	}
-
 	private void start() {
 		try {
 			System.out.println("Avvio il server");

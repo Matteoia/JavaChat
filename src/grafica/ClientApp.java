@@ -3,13 +3,10 @@ package grafica;
 import client.Client;
 
 import javax.swing.*;
-import javax.swing.text.DefaultCaret;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ClientApp extends JFrame {
-    private Client client;
+    private Client clientController;
     public  final int HEIGHT = 500;
     public  final int WIDTH = 800;
 
@@ -32,24 +29,32 @@ public class ClientApp extends JFrame {
         this.add(userOutput, "South");
         this.add(usersBar, "East");
 
-        this.client = new Client(this, ip, port);
-        this.client.start();
+        this.clientController = new Client(this, ip, port);
+        this.clientController.start();
     }
 
     public void showMessage(String msg) {
         this.userInput.setText(msg);
     }
 
-    public void sendMessage(String msg){
-        this.client.sendMessage(msg);
-    }
-
-    public static void main(String[] args){
-        ClientApp ca = new ClientApp("localhost", 5000);
-        ca.setVisible(true);
+    public void setMessage(String msg) {
+        String dest = this.usersBar.getSelectedUser();
+        if(dest != null){
+            System.out.println("Invio un messaggio a "+dest);
+            this.clientController.setMessage(msg+":to:"+dest);
+        }else{
+            this.clientController.setMessage(msg);
+        }
     }
 
     public String[] getOnlineUsers() {
-        return this.client.getOnlineUsers();
+        if(this.clientController.user != null)
+            return this.clientController.getOnlineUsers();
+        return null;
+    }
+
+    public static void main(String[] args) {
+        ClientApp ca = new ClientApp("localhost", 5000);
+        ca.setVisible(true);
     }
 }

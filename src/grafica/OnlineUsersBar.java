@@ -25,10 +25,8 @@ public class OnlineUsersBar extends JPanel {
         this.setVisible(true);
     }
 
-    public void reloadUsers(){
-        this.users.repaint();
-        this.repaint();
-        this.client.repaint();
+    public String getSelectedUser() {
+        return this.users.getSelectedValue();
     }
 
     private class MyListener implements ActionListener {
@@ -36,12 +34,12 @@ public class OnlineUsersBar extends JPanel {
         public void actionPerformed(ActionEvent e) {
             if(e.getActionCommand().equals("Show Users")){
                 String[] tmp = client.getOnlineUsers();
-                DefaultListModel dlm = new DefaultListModel();
-                for(String user : tmp)
-                    dlm.addElement(user);
-                users.setModel(dlm);
-                reloadUsers();
-
+                if(tmp != null){
+                    DefaultListModel dlm = new DefaultListModel();
+                    for(String user : tmp)
+                        dlm.addElement(user);
+                    users.setModel(dlm);
+                }
             }
         }
     }

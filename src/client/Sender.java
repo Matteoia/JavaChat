@@ -48,30 +48,32 @@ public class Sender extends Thread {
 	public void run() {
 		try {
 			String msg;
-			this.client.showMessage("Inserisci il tuo nome");
-			msg = this.client.getMessage();
-			serverOutput.writeObject("UserName:from:"+msg);
+			this.client.user = client.getMessage();
+			serverOutput.writeObject("RegisterRequest:to:ServerSender");
+			serverOutput.writeObject(this.client.user);
 
 			while (!this.client.isClosed()) {
 				msg = this.client.getMessage();
 				String[] info = msg.split(":to:");
 				if (info.length == 2) {
 					String testo = info[0];
-					String nomeDestinatario = info[1].replaceAll("\\s+", "");
-					PublicKey chiaveDestinatario = this.client.getDestPublicKey(nomeDestinatario);
-					if (chiaveDestinatario != null) {
-						byte[] messaggioCriptato = AsymmetricEncr.cripta(testo, chiaveDestinatario);
-						client.showMessage(msg);
-						serverOutput.writeObject("CriptedMessage:to:"+nomeDestinatario);
-						serverOutput.writeObject(messaggioCriptato);
+					String dest = info[1].replaceAll("\\s+", "");
+					if(dest.equals("ServerSender")) {
+						serverOutput.writeObject(msg);
+					} else {
+						PublicKey destKey = this.client.getDestPublicKey(dest);
+						if (dest != null) {
+							byte[] messaggioCriptato = AsymmetricEncr.cripta(testo, destKey);
+							client.showMessage(this.client.user + ":");
+							client.showMessage(testo);
+							serverOutput.writeObject("CriptedMessage:to:" + dest);
+							serverOutput.writeObject(messaggioCriptato);
+						}
 					}
-				} else
-					this.serverOutput.writeObject(msg);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-
 }
