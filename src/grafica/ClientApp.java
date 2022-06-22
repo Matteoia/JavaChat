@@ -6,13 +6,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ClientApp extends JFrame {
-    private Client clientController;
+    public final Font font = new Font("SansSerif", Font.BOLD, 17);
     public  final int HEIGHT = 500;
     public  final int WIDTH = 800;
+    private Client clientController;
     private UserOutputComponent userOutput;
     private UserInputComponent userInput;
     private OnlineUsersBar usersBar;
-    public final Font font = new Font("SansSerif", Font.BOLD, 17);
 
     public ClientApp(){
         String ip=""; int port=0;
@@ -36,7 +36,8 @@ public class ClientApp extends JFrame {
         this.clientController.start();
     }
 
-    public void showMessage(String msg) {
+    public void showMessage(String msg, String sender) {
+        this.userInput.addMsg(msg, sender);
         this.userInput.setText(msg);
     }
 
@@ -46,6 +47,7 @@ public class ClientApp extends JFrame {
             dest = "ServerSender";
         this.clientController.setMessage(msg);
         this.clientController.setDest(dest);
+        this.userInput.getChat(dest);
     }
 
     public String[] getOnlineUsers() {

@@ -19,7 +19,7 @@ public class UserOutputComponent extends JPanel {
 
         this.sendButton.setPreferredSize(new Dimension(client.WIDTH/10, client.HEIGHT/10));
         this.sendButton.addActionListener(listener);
-        this.userData.setPreferredSize(new Dimension(client.WIDTH, client.HEIGHT/10));
+        this.userData.setPreferredSize(new Dimension((client.WIDTH*9)/10, client.HEIGHT/10));
         this.userData.setFont(client.font);
 
         this.add(userData, "Center");

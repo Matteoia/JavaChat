@@ -8,7 +8,6 @@ public class Utenti {
     private final Map<String, ObjectOutputStream> connessioni;
     public Utenti(){
         connessioni = new HashMap<>();
-        connessioni.put("ServerSender", null);
     }
     public ObjectOutputStream getUserStream(String utente) {
         return connessioni.get(utente);

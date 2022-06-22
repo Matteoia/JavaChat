@@ -63,8 +63,7 @@ public class Sender extends Thread {
 					PublicKey destKey = this.client.getDestPublicKey(dest);
 					if (dest != null) {
 						byte[] messaggioCriptato = AsymmetricEncr.cripta(data, destKey);
-						client.showMessage(this.client.user + ":");
-						client.showMessage(data);
+						client.showMessage(data, this.client.user);
 						serverOutput.writeObject("CriptedMessage:to:"+dest);
 						serverOutput.writeObject(messaggioCriptato);
 					}

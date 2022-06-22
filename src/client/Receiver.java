@@ -31,7 +31,7 @@ public class Receiver extends Thread {
 								client.setUsers((String[])serverInput.readObject());
 								client.autoDataReceived();
 							}if(messaggio.equals("StringResponse"))
-								client.showMessage((String)serverInput.readObject());
+								client.showMessage((String)serverInput.readObject(), nomeMittente);
 						}else{
 							if(messaggio.equals("PublicKeyRequest")){
 								client.sendPublicKey(nomeMittente);
@@ -41,8 +41,7 @@ public class Receiver extends Thread {
 							}if(messaggio.equals("CriptedMessage")){
 								byte[] messaggioCifrato = (byte[])serverInput.readObject();
 								String messaggioInChiaro = AsymmetricEncr.decripta(messaggioCifrato, client.getPrivateKey());
-								client.showMessage(nomeMittente+":");
-								client.showMessage(messaggioInChiaro);
+								client.showMessage(messaggioInChiaro, nomeMittente);
 							}
 						}
 					}

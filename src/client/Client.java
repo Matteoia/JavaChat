@@ -35,6 +35,17 @@ public class Client {
 		}
 	}
 
+	public void start() {
+		try{
+			this.sender = new Sender(this);
+			this.receiver = new Receiver(this);
+			this.sender.start();
+			this.receiver.start();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
 	public PrivateKey getPrivateKey(){
 		return chiavi.getPrivate();
 	}
@@ -89,9 +100,10 @@ public class Client {
 		userDataSem.release();
 	}
 
-	public void showMessage(String s) {
-		graphicClient.showMessage(s);
+	public void showMessage(String msg, String sender) {
+		graphicClient.showMessage(msg, sender);
 	}
+
 
 	public String getMessage() {
 		try{
@@ -104,17 +116,6 @@ public class Client {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public void start() {
-		try{
-			this.sender = new Sender(this);
-			this.receiver = new Receiver(this);
-			this.sender.start();
-			this.receiver.start();
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 	}
 
 	public String[] getOnlineUsers() {

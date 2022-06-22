@@ -3,11 +3,13 @@ package grafica;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.util.HashMap;
 
 public class UserInputComponent extends JPanel {
     private ClientApp client;
     private JScrollPane scroll;
     private JTextPane dataReceived = new JTextPane();
+    private HashMap<String, JTextPane> chats = new HashMap<>();
 
     public UserInputComponent(ClientApp client){
         this.client = client;
@@ -24,6 +26,16 @@ public class UserInputComponent extends JPanel {
         this.add(scroll);
     }
 
+    public void addChat(String user){
+        this.chats.put(user, new JTextPane());
+    }
+
+
+    public void getChat(String user){
+        if(!this.chats.containsKey(user))
+            addChat(user);
+        this.dataReceived = this.chats.get(user);
+    }
 
     public void setText(String msg) {
         String tmp = this.dataReceived.getText();
