@@ -29,7 +29,7 @@ public class Receiver extends Thread {
 						if(nomeMittente.equals("ServerSender")){
 							if(messaggio.equals("UsersListResponse")){
 								client.setUsers((String[])serverInput.readObject());
-								client.usersReceived();
+								client.autoDataReceived();
 							}if(messaggio.equals("StringResponse"))
 								client.showMessage((String)serverInput.readObject());
 						}else{

@@ -9,11 +9,9 @@ public class ClientApp extends JFrame {
     private Client clientController;
     public  final int HEIGHT = 500;
     public  final int WIDTH = 800;
-
     private UserOutputComponent userOutput;
     private UserInputComponent userInput;
     private OnlineUsersBar usersBar;
-
     public final Font font = new Font("SansSerif", Font.BOLD, 17);
 
     public ClientApp(String ip, int port){
@@ -39,12 +37,10 @@ public class ClientApp extends JFrame {
 
     public void setMessage(String msg) {
         String dest = this.usersBar.getSelectedUser();
-        if(dest != null){
-            System.out.println("Invio un messaggio a "+dest);
-            this.clientController.setMessage(msg+":to:"+dest);
-        }else{
-            this.clientController.setMessage(msg);
-        }
+        if(dest == null)
+            dest = "ServerSender";
+        this.clientController.setMessage(msg);
+        this.clientController.setDest(dest);
     }
 
     public String[] getOnlineUsers() {

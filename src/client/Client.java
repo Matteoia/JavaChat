@@ -17,15 +17,12 @@ public class Client {
 	private Socket socket;
 	private KeyPair chiavi;
 	private HashMap<String, PublicKey> chiaviF = new HashMap<>();
-	private Semaphore attesaChiave = new Semaphore(0);
 	private Sender sender;
 	private Receiver receiver;
 	private ClientApp graphicClient;
-	private Semaphore messageS = new Semaphore(0);
-	private String msg;
+	private Semaphore userDataSem = new Semaphore(0), autoDataSem = new Semaphore(0);
 	private String[] users;
-	private Semaphore usersSemaphore = new Semaphore(0);
-	public String user;
+	public String user, dest, msg;
 
 
 	public Client(ClientApp graphicClient, String ip, int port) {
@@ -66,7 +63,7 @@ public class Client {
 			if(ris != null)
 				return ris;
 			sender.makePublicKeyRequest(nomeDestinatario);
-			attesaChiave.acquire();
+			autoDataSem.acquire();
 			return chiaviF.get(nomeDestinatario);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -76,7 +73,7 @@ public class Client {
 
 	public void addPublicKey(String nome, PublicKey key) {
 		chiaviF.put(nome, key);
-		attesaChiave.release();
+		autoDataSem.release();
 	}
 
 	public void sendPublicKey(String nomeMittente) {
@@ -89,8 +86,7 @@ public class Client {
 
 	public void setMessage(String msg) {
 		this.msg = msg;
-		System.out.println(msg);
-		messageS.release();
+		userDataSem.release();
 	}
 
 	public void showMessage(String s) {
@@ -99,10 +95,10 @@ public class Client {
 
 	public String getMessage() {
 		try{
-			msg = null;
+			this.msg = null;
 			if(this.msg == null){
-				messageS.acquire();
-				return msg;
+				userDataSem.acquire();
+				return this.msg;
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -124,7 +120,7 @@ public class Client {
 	public String[] getOnlineUsers() {
 		try{
 			this.sender.makeOnlineUsersRequest();
-			this.usersSemaphore.acquire();
+			this.autoDataSem.acquire();
 			return this.users;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -132,11 +128,15 @@ public class Client {
 		return null;
 	}
 
-	public void usersReceived() {
-		this.usersSemaphore.release();
+	public void autoDataReceived(){
+		this.autoDataSem.release();
 	}
 
 	public void setUsers(String[] users) {
 		this.users = users;
+	}
+
+	public void setDest(String dest) {
+		this.dest = dest;
 	}
 }

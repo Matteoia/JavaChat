@@ -47,28 +47,26 @@ public class Sender extends Thread {
 	@Override
 	public void run() {
 		try {
-			String msg;
+			String msg, dest, data;
 			this.client.user = client.getMessage();
-			serverOutput.writeObject("RegisterRequest:to:ServerSender");
+			serverOutput.writeObject("RegisterRequest:to:"+this.client.dest);
 			serverOutput.writeObject(this.client.user);
 
 			while (!this.client.isClosed()) {
 				msg = this.client.getMessage();
-				String[] info = msg.split(":to:");
-				if (info.length == 2) {
-					String testo = info[0];
-					String dest = info[1].replaceAll("\\s+", "");
-					if(dest.equals("ServerSender")) {
-						serverOutput.writeObject(msg);
-					} else {
-						PublicKey destKey = this.client.getDestPublicKey(dest);
-						if (dest != null) {
-							byte[] messaggioCriptato = AsymmetricEncr.cripta(testo, destKey);
-							client.showMessage(this.client.user + ":");
-							client.showMessage(testo);
-							serverOutput.writeObject("CriptedMessage:to:" + dest);
-							serverOutput.writeObject(messaggioCriptato);
-						}
+				dest = client.dest;
+				data = msg.split(":to:")[0];
+
+				if(dest.equals("ServerSender")) {
+					serverOutput.writeObject(msg);
+				} else {
+					PublicKey destKey = this.client.getDestPublicKey(dest);
+					if (dest != null) {
+						byte[] messaggioCriptato = AsymmetricEncr.cripta(data, destKey);
+						client.showMessage(this.client.user + ":");
+						client.showMessage(data);
+						serverOutput.writeObject("CriptedMessage:to:"+dest);
+						serverOutput.writeObject(messaggioCriptato);
 					}
 				}
 			}

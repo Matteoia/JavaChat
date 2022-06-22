@@ -7,18 +7,18 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class OnlineUsersBar extends JPanel {
-    private ClientApp client;
+    private ClientApp graphicClient;
     private JList<String> users = new JList<>();
     private Button button = new Button("Show Users");
     private MyListener listener = new MyListener();
 
 
-    public OnlineUsersBar(ClientApp client){
-        this.client = client;
+    public OnlineUsersBar(ClientApp graphicClient){
+        this.graphicClient = graphicClient;
         this.setLayout(new BorderLayout());
 
         this.button.addActionListener(listener);
-        this.button.setPreferredSize(new Dimension((client.WIDTH*20)/100, client.HEIGHT/10));
+        this.button.setPreferredSize(new Dimension((graphicClient.WIDTH*20)/100, graphicClient.HEIGHT/10));
         this.add(button, "North");
         this.add(users, "Center");
 
@@ -33,7 +33,7 @@ public class OnlineUsersBar extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getActionCommand().equals("Show Users")){
-                String[] tmp = client.getOnlineUsers();
+                String[] tmp = graphicClient.getOnlineUsers();
                 if(tmp != null){
                     DefaultListModel dlm = new DefaultListModel();
                     for(String user : tmp)
