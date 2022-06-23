@@ -22,6 +22,7 @@ public class Receiver extends Thread {
 				obj = serverInput.readObject();
 				if(obj instanceof String) {
 					String msg = (String)obj;
+					System.out.println(msg);
 					String[] data = msg.split(":from:");
 					if(data.length == 2){
 						String messaggio = data[0];

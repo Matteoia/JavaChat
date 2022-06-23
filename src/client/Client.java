@@ -100,8 +100,12 @@ public class Client {
 		userDataSem.release();
 	}
 
-	public void showMessage(String msg, String sender) {
-		graphicClient.showMessage(msg, sender);
+	public void showMessage(String msg, String dest) {
+		graphicClient.showMessage(msg, dest);
+	}
+
+	public void showMessage(String msg, String dest, String user) {
+		graphicClient.showMessage(msg, dest, user);
 	}
 
 

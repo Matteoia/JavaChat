@@ -17,6 +17,7 @@ public class ConnectionSetup extends JFrame {
     private final Font font = new Font("SansSerif", Font.PLAIN, 13);
 
     public ConnectionSetup() {
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setSize(new Dimension(400, 200));
         this.setResizable(false);
         this.setLayout(new GridLayout(3, 1));

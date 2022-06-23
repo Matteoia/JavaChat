@@ -1,6 +1,8 @@
 package grafica;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,12 +13,13 @@ public class OnlineUsersBar extends JPanel {
     private JList<String> users = new JList<>();
     private Button button = new Button("Show Users");
     private MyListener listener = new MyListener();
+    private SelectionListener sListener = new SelectionListener();
 
 
     public OnlineUsersBar(ClientApp graphicClient){
         this.graphicClient = graphicClient;
         this.setLayout(new BorderLayout());
-
+        this.users.addListSelectionListener(sListener);
         this.button.addActionListener(listener);
         this.button.setPreferredSize(new Dimension((graphicClient.WIDTH*20)/100, graphicClient.HEIGHT/10));
         this.add(button, "North");
@@ -41,6 +44,13 @@ public class OnlineUsersBar extends JPanel {
                     users.setModel(dlm);
                 }
             }
+        }
+    }
+
+    private class SelectionListener implements ListSelectionListener {
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            graphicClient.loadUserChat(users.getSelectedValue());
         }
     }
 }
